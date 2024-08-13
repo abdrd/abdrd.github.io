@@ -1,4 +1,4 @@
-import styles
+import STYLES
 import os
 import datetime
 import string
@@ -44,25 +44,12 @@ index = f"""<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {styles.fonts}
-    {styles.bootstrap}
+    {STYLES.fonts}
+    {STYLES.bootstrap}
     <style>
-    {styles.index_css}
+    {STYLES.index_css}
 
     </style>
-
-    <!-- Google Analytics -->
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-21L9B7E4DJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      const gtag = () => dataLayer.push(arguments)
-      gtag("js", new Date());
-    
-      gtag("config", "G-21L9B7E4DJ");
-    </script>
-    
-    <!-- END Google Analytics   -->
 
     <title>{TITLE}</title>
 </head>

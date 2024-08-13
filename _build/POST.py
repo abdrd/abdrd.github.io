@@ -8,7 +8,7 @@ structure of the markdown:
     ---
     <md>
 """
-import markdown2, time, os, sys, re, styles
+import markdown2, time, os, sys, re, STYLES
 from pygments.formatters import HtmlFormatter
 
 def mdtohtml(md_path):
@@ -42,30 +42,19 @@ def mdtohtml(md_path):
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <title>{title}</title>\n<meta name="description" content="{description}">
             <meta name="keywords" content="{keywords}">
-            {styles.fonts}
-            {styles.bootstrap}
+            {STYLES.fonts}
+            {STYLES.bootstrap}
             <style>
-            {styles.css}
+            {STYLES.css}
             {pygments_css}
-            </style>    
-
-        <!-- Google Analytics -->
-        
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-21L9B7E4DJ"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          const gtag = () => dataLayer.push(arguments)
-          gtag("js", new Date());
-        
-          gtag("config", "G-21L9B7E4DJ");
-        </script>
-    
-        <!-- END Google Analytics   -->
+            </style>
 
         </head>
-            <body class="container">
-                {html_text}
-            </body>
+
+        <body class="container">
+            {html_text}
+        </body>
+        
         </html>
         """
     md_filename = md_path.split('.')[0]

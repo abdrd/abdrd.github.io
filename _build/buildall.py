@@ -1,9 +1,7 @@
 import os
-import sys
 
 def invoke_command(filename):
-    command = f"python3 blogmaker.py {filename}"
-    os.system(command)
+    os.system(f"python3 ./_build/MAIN.py {filename}")
 
 if __name__ == "__main__":
     files = os.listdir()
@@ -11,4 +9,4 @@ if __name__ == "__main__":
     for md_file in md_files:
         invoke_command(md_file)
 
-    os.system("python3 blogmaker.py")
+    os.system("python3 ./_build/MAIN.py")

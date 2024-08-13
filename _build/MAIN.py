@@ -1,11 +1,11 @@
-import mdtohtml, index, sys
+import POST, INDEX, sys
 
 def main():
     if len(sys.argv) == 2:
-        mdtohtml.mdtohtml(md_path=sys.argv[1])
+        POST.mdtohtml(md_path=sys.argv[1])
     elif len(sys.argv) > 2:
         sys.exit("usage: mdc optional[<markdown_file>]")
-    index.make_index()
+    INDEX.make_index()
 
 if __name__ == "__main__":
     main()
