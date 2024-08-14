@@ -83,6 +83,7 @@ index = f"""<!DOCTYPE html>
     <div id="accounts-container">
         <a class="account-link" target="_blank" href="https://github.com/betelgeuse-7/">Github (betelgeuse-7)</a>
         <a class="account-link" target="_blank" href="https://twitter.com/abidindrd_">Twitter (abidindrd_)</a>
+        <a class="account-link" href="mailto:abidindrd@gmail.com">Email (abidindrd@gmail.com)</a>
     </div>
     <div id="posts-title-container">
         <h2>{posts_title}</h2>
