@@ -8,15 +8,12 @@ TITLE = "[BLOG] betelgeuse-7"
 def make_post_list():
     posts = []
     directories = [f.name for f in os.scandir(".") if f.is_dir()]
-
     for d in directories:
         if d in string.punctuation or d.startswith("_"):
             continue
         meta_file = os.path.join(d, "me.ta")
-        
         if not os.path.exists(meta_file):
             continue
-
         with open(meta_file, 'r') as f:
             contents = f.read()
             dictionary = {}
@@ -26,14 +23,11 @@ def make_post_list():
                 dictionary[k] = v
             dictionary["url"] = d
             posts.append(dictionary)
-        
     posts.sort(key=lambda x: datetime.datetime.strptime(x["date"], '%d-%m-%Y'), reverse=True)
-
     html = ""
     for p in posts:
         human_date = datetime.datetime.strptime(p["date"], '%d-%m-%Y').strftime('%B %d, %Y')
         html += f'<a class="post" href={p["url"]+"/"}>{p["title"]}</a><p class="date">{human_date}</p>'
-
     return (html, "No posts" if len(posts) == 0 else "All posts")
 
 (posts_html, posts_title) = make_post_list()
@@ -44,30 +38,58 @@ index = f"""<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLES.fonts}
-    {STYLES.bootstrap}
+        {STYLES.bootstrap}
+        {STYLES.fonts}
     <style>
-    {STYLES.index_css}
 
+/*
+
+
+
+
+         
+                                                                                        _.oo.
+                                                                 _.u[[/;:,.         .odMMMMMM'
+                                                              .o888UU[[[/;:-.  .o@P^    MMM^
+                                                             oN88888UU[[[/;::-.        dP^
+                                                            dNMMNN888UU[[[/;:--.   .o@P^
+                                                           ,MMMMMMN888UU[[/;::-. o@^
+                                                           NNMMMNN888UU[[[/~.o@P^
+                                                           888888888UU[[[/o@^-..
+                                                          oI8888UU[[[/o@P^:--..
+                                                       .@^  YUU[[[/o@^;::---..
+                                                     oMP     ^/o@P^;:::---..
+                                                  .dMMM    .o@^ ^;::---...
+                                                 dMMMMMMM@^`       `^^^^
+                                                YMMMUP^
+                                                 ^^
+
+
+
+                                                                                                                 Saturn is beautiful
+
+
+*/
+    
+        {STYLES.index_css}
     </style>
 
     <title>{TITLE}</title>
 </head>
+
 <body class="container">
     <header>
     <h2 id="title">Abidin Durdu (betelgeuse-7)</h2>
-    <div>
-        <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target="_blank" href="https://github.com/betelgeuse-7/">Github (betelgeuse-7)</a>
+    <div id="accounts-container">
+        <a class="account-link" target="_blank" href="https://github.com/betelgeuse-7/">Github (betelgeuse-7)</a>
+        <a class="account-link" target="_blank" href="https://twitter.com/abidindrd_">Twitter (abidindrd_)</a>
     </div>
-    <div>
-        <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target="_blank" href="https://twitter.com/abidindrd_">Twitter (abidindrd_)</a>
-    </div>
-    <div>
+    <div id="posts-title-container">
         <h2>{posts_title}</h2>
     </div>
-
-    {posts_html}
-    
+    <div id="posts-container">
+        {posts_html}
+    </div>
     </header>
 </body>
 </html>

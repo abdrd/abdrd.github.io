@@ -44,6 +44,7 @@ def mdtohtml(md_path):
             <meta name="keywords" content="{keywords}">
             {STYLES.fonts}
             {STYLES.bootstrap}
+            {STYLES.latex}
             <style>
             {STYLES.css}
             {pygments_css}

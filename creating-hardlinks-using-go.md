@@ -18,27 +18,28 @@ The inode structure includes metadata such as the date of creation, last modific
 
 Directories also have an inode structure, but theirs is a bit different than that of a file's. The most significant difference is that a directory's inode contains a list of directory entries (Different implementations might use different data structures to hold directory entries. I said "a list" to make the explanation simpler). A directory entry is, in its simplest form, a pair of human-friendly name of the file and an inode number.
 
-```
-struct Dir_Inode = {
-    int         inode
-    timestamp   created_at
-    timestamp   last_updated
-    int         owner_id
-    ...
-    Dir_Entry[] entries
-}
+```c
+typedef struct { string name; int inode; } Dir_Entry;
 
-pair Dir_Entry = (string name | int inode)
+typedef struct {
+    int         inode;
+    timestamp   created_at;
+    timestamp   last_updated;
+    int         owner_id;
+    ...
+    Dir_Entry[] entries;
+} Dir_Inode
+
 ```
 
 ### How the OS knows where to look for the file data
 
-```
-struct File_Inode = {
-    int inode
+```c
+typedef struct {
+    int inode;
     ...
-    int block_addr  
-}
+    int block_addr; 
+} File_Inode;
 ```
 
 When you double-click on a text file to read it, or when you use `cat` to read a file; under the hood, the operating system (the file system, more specifically) has to do a few things. 
@@ -108,7 +109,7 @@ Code:
 
 We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the `makeHardlink` function defined below. That function relies on a system call called `linkat` that basically does what we want: It creates hard links. Since the `linkat` function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the `syscall.Link` function in the standard library that uses `//sys` directives to make it possible to use the `linkat` function. See [syscall.Link](https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259). `//sys` directives are used to tell the compiler to generate necessary `.c`, `.h`, and `.go` files.). 
 
-```
+```go
 /*
 #include <fcntl.h>
 #include <unistd.h>
