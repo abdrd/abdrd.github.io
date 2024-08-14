@@ -115,8 +115,8 @@ body {
 
 #accounts-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 2rem;
     margin-bottom: 3rem;
 }
@@ -148,6 +148,17 @@ body {
 
 .account-link:hover {
     color: #1a5276;
+}
+
+@media (max-width: 600px) {
+    #accounts-container {
+        gap: 0.5rem;
+    }
+
+    .account-link {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
 }
 
 #posts-title-container {
