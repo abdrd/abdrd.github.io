@@ -3,7 +3,7 @@ import os
 import datetime
 import string
 
-TITLE = "[BLOG] betelgeuse-7"
+TITLE = "BLOG - abdrd"
 
 def make_post_list():
     posts = []
@@ -78,9 +78,9 @@ index = f"""<!DOCTYPE html>
 
 <body class="container">
     <header>
-    <h2 id="title">Abidin Durdu (betelgeuse-7)</h2>
+    <h2 id="title">Abidin Durdu (abdrd)</h2>
     <div id="accounts-container">
-        <a class="account-link" target="_blank" href="https://github.com/betelgeuse-7/">GitHub (betelgeuse-7)</a>
+        <a class="account-link" target="_blank" href="https://github.com/abdrd/">GitHub (abdrd)</a>
         <a class="account-link" target="_blank" href="https://twitter.com/abidindrd_">Twitter (abidindrd_)</a>
         <a class="account-link" href="mailto:abidindrd@gmail.com">Email (abidindrd@gmail.com)</a>
     </div>
