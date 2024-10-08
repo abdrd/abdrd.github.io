@@ -49,7 +49,6 @@ def mdtohtml(md_path):
             {STYLES.css}
             {pygments_css}
             </style>
-
         </head>
 
         <body class="container">
