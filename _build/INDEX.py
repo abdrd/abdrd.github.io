@@ -28,7 +28,7 @@ def make_post_list():
     for p in posts:
         human_date = datetime.datetime.strptime(p["date"], '%d-%m-%Y').strftime('%B %d, %Y')
         html += f'<a class="post" href={p["url"]+"/"}>{p["title"]}</a><p class="date">{human_date}</p>'
-    return (html, "No posts" if len(posts) == 0 else "All posts")
+    return (html, "No posts" if len(posts) == 0 else "Posts")
 
 (posts_html, posts_title) = make_post_list()
 
@@ -77,7 +77,6 @@ index = f"""<!DOCTYPE html>
 </head>
 
 <body class="container">
-    <header>
     <h2 id="title">Abidin Durdu (abdrd)</h2>
     <div id="accounts-container">
         <a class="account-link" target="_blank" href="https://github.com/abdrd/">GitHub (abdrd)</a>
@@ -90,7 +89,6 @@ index = f"""<!DOCTYPE html>
     <div id="posts-container">
         {posts_html}
     </div>
-    </header>
 </body>
 </html>
 """

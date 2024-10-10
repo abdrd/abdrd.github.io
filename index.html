@@ -48,123 +48,55 @@
 */
     
         
-:root {
-    --link-hover-bg: rgba(5, 46, 252, 0.1);
-    --post-link-border-color: rgba(5, 46, 252, 0.5);
-}
-
 body {
-    font-family: "Azeret Mono", serif;
+    font-family: "Poly", serif;
     font-weight: 400;
+    font-size: 1.2rem;
+    text-align: justify;
     line-height: 1.75;
-    color: #333;
+    color: #101110;
     background-color: #f7f7f7;
-    padding: 2rem;
+    padding: 4rem;
+    margin-top: 1rem;
 }
 
-#title {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    color: #2c3e50;
-    font-size: 3rem;
-    font-weight: 700;
-    text-align: center;
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('_asset/bg1.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.38;
+    z-index: -1;
 }
 
-#accounts-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
+a {
+    color: #0e2bed;
 }
 
 .account-link {
-    position: relative;
-    color: #2980b9;
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
-    padding: 0.2rem 04.rem;
-}
-
-.account-link::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background-color: var(--link-hover-bg);
-    z-index: -1;
-    transition: width 0.35s ease;
-}
-
-.account-link:hover::before {
-    width: 100%;
-}
-
-.account-link:hover {
-    color: #1a5276;
-}
-
-@media (max-width: 600px) {
-    #accounts-container {
-        gap: 0.5rem;
-    }
-
-    .account-link {
-        font-size: 0.9rem;
-        padding: 0.5rem;
-    }
-}
-
-#posts-title-container {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #34495e;
-}
-
-#posts-container {
-    margin-bottom: 2rem;
-}
-
-* {
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
+    display: block;
+    margin: 1rem;
 }
 
 .post {
-    position: relative;
-    padding: 0.8rem;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    border: 1px, solid;
-    border-color: var(--post-link-border-color);
+    margin: 1rem;
+    font-size: 1.45rem;
 }
 
-.date {
-    margin-top: 0.5rem;
+#title {
+    font-size: 2.8rem;
+    background-color: #fffdcc;
+    padding: 0.4rem;
 }
 
-.post::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background-color: var(--link-hover-bg);
-    z-index: -1;
-    transition: width 0.35s ease;
-}
-
-.post:hover::before {
-    width: 100%;
+#posts-title-container h2 {
+    font-size: 2.4rem;
+    margin-top: 2rem;
 }
 
 
@@ -174,7 +106,6 @@ body {
 </head>
 
 <body class="container">
-    <header>
     <h2 id="title">Abidin Durdu (abdrd)</h2>
     <div id="accounts-container">
         <a class="account-link" target="_blank" href="https://github.com/abdrd/">GitHub (abdrd)</a>
@@ -182,11 +113,10 @@ body {
         <a class="account-link" href="mailto:abidindrd@gmail.com">Email (abidindrd@gmail.com)</a>
     </div>
     <div id="posts-title-container">
-        <h2>All posts</h2>
+        <h2>Posts</h2>
     </div>
     <div id="posts-container">
         <a class="post" href=polymorphism/>Polymorphism</a><p class="date">July 20, 2024</p><a class="post" href=creating-hardlinks-using-go/>Creating Hardlinks Using Go</a><p class="date">May 21, 2023</p>
     </div>
-    </header>
 </body>
 </html>
