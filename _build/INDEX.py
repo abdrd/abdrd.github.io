@@ -77,13 +77,16 @@ index = f"""<!DOCTYPE html>
 </head>
 
 <body class="container">
-    <h2 id="title">Abidin Durdu (abdrd)</h2>
+    <h2 id="title">Abidin Durdu</h2>
+    <div class="title-container">
+        <h2>Contact</h2>
+    </div>
     <div id="accounts-container">
         <a class="account-link" target="_blank" href="https://github.com/abdrd/">GitHub (abdrd)</a>
         <a class="account-link" target="_blank" href="https://twitter.com/abidindrd_">Twitter (abidindrd_)</a>
         <a class="account-link" href="mailto:abidindrd@gmail.com">Email (abidindrd@gmail.com)</a>
     </div>
-    <div id="posts-title-container">
+    <div class="title-container">
         <h2>{posts_title}</h2>
     </div>
     <div id="posts-container">

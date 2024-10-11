@@ -91,6 +91,18 @@ strong {
     color: #1c3000;
 }
 
+#home-link {
+    font-size: 1.5rem;
+}
+
+#comment-link {
+    font-size: 1.5rem;
+    margin-left: 4rem;
+}
+
+#top-of-the-post-link {
+    font-size: 1.5rem;
+}
 """
 
 index_css = """
@@ -140,7 +152,7 @@ a {
     padding: 0.4rem;
 }
 
-#posts-title-container h2 {
+.title-container h2 {
     font-size: 2.4rem;
     margin-top: 2rem;
 }

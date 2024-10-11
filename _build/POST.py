@@ -51,8 +51,13 @@ def mdtohtml(md_path):
             </style>
         </head>
 
-        <body class="container">
+        <body class="container" id="top">
+            <a id="home-link" href="/">Home page</a>
             {html_text}
+            <a id="top-of-the-post-link" href="#top">Top</a>
+            <a id="comment-link" href="mailto:abidindrd@gmail.com?subject=My comment on your post: '{title}'">
+                Leave a comment
+            </a>
         </body>
         
         </html>
