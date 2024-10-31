@@ -315,7 +315,7 @@ Device: 802h/2050d  Inode: 2101090     Links: 1
 
 <p>Code:</p>
 
-<script src="https://gist.github.com/betelgeuse-7/23934b0f250389d4a290014feac3d106.js"></script>
+<script src="https://gist.github.com/abdrd/23934b0f250389d4a290014feac3d106.js"></script>
 
 <p>We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the <code>makeHardlink</code> function defined below. That function relies on a system call called <code>linkat</code> that basically does what we want: It creates hard links. Since the <code>linkat</code> function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the <code>syscall.Link</code> function in the standard library that uses <code>//sys</code> directives to make it possible to use the <code>linkat</code> function. See <a target="_blank" href="https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259">syscall.Link</a>. <code>//sys</code> directives are used to tell the compiler to generate necessary <code>.c</code>, <code>.h</code>, and <code>.go</code> files.). </p>
 
