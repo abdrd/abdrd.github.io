@@ -81,6 +81,7 @@ a {
     border: 1px solid var(--green);
     padding-left: 0.2rem;
     padding-right: 0.2rem;
+    overflow-wrap: anywhere;
 }
 
 a:hover {
@@ -95,15 +96,18 @@ strong {
 
 #home-link {
     font-size: 1.5rem;
+    overflow-wrap: anywhere;
 }
 
 #comment-link {
     font-size: 1.5rem;
     margin-left: 4rem;
+    overflow-wrap: anywhere;
 }
 
 #top-of-the-post-link {
     font-size: 1.5rem;
+    overflow-wrap: anywhere;
 }
 
 sup {
@@ -125,6 +129,10 @@ footnote::before {
     margin-right: 8px;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
 """
 
 index_css = """
@@ -156,11 +164,13 @@ body::before {
 
 a {
     color: #0e2bed;
+    overflow-wrap: anywhere;
 }
 
 .account-link {
     display: block;
     margin: 1rem;
+    overflow-wrap: anywhere;
 }
 
 .post {

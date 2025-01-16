@@ -2,6 +2,25 @@
 
 This script is ~90% written by ChatGPT to generate my blog page.
 
+------
+
+First, create a virtual environment and activate it.
+
+```
+py -m venv <name>
+source ./<name>/bin/activate
+```
+
+Install the dependencies.
+
+```
+pip install -r requirements.txt
+```
+
+------
+
+Now,
+
 Run `python3 _build/buildall.py` in the root of the project.
 
 And, optionally, start a server with `python3 -m http.server` and go to `0.0.0.0:8000`.
