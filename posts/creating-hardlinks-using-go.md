@@ -1,7 +1,10 @@
-title="Creating Hardlinks Using Go"
-description="ln"
-keywords="go, hardlinks, ln, os, cgo"
-date="21-05-2023"
+---
+title: Creating Hardlinks Using Go
+description: ln
+keywords:
+    - go
+    - os
+date: 21-05-2023
 ---
 
 # Creating hard links in Go (implementing a tiny subset of `ln`)

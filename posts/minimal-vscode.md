@@ -1,7 +1,13 @@
-title="Minimal VSCode/VSCodium Config"
-description="Minimal VSCode configuration/settings"
-keywords="vscode,vscodium,editor,config"
-date="10-11-2024"
+---
+title: Minimal VSCode/VSCodium Config
+description: Minimal VSCode configuration/settings
+tags:
+  - editor
+  - vscode
+  - vscodium
+  - config
+  - development-environment
+date: 10-11-2024
 ---
 
 I created a simple configuration for VSCode/VSCodium. This configuration hides all the things that annoy me. It hides the title bar, status bar and any other bar. It hides the mini map. It removes the margin of line numbers. It removes file tabs.
@@ -15,7 +21,7 @@ This config also changes the background color to a beige (?) color which I think
 
 The font is hardcoded in the config. You can of course change it to whatever you like.
 
-![Io programming language's garbage collector](./config.png)
+![Io programming language's garbage collector](/assets/minimal-vscodium.png)
 <small>Garbage collector of the <a href="https://iolanguage.org/index.html">Io</a> programming language</small>
 
 Here is the gist link:

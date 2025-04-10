@@ -41,44 +41,37 @@
       <link rel="stylesheet" href="/assets/index.css" />
 
 
-    <title>[BLOG] Abidin Durdu - abdrd</title>
+    <title>{{index_title}}</title>
 </head>
 
 <body class="container">
-    <h1 id="title">Abidin Durdu</h1>
+    <h1 id="title">{{author.name}}</h1>
     <div class="title-container">
         <h2>Contact</h2>
     </div>
     <div id="accounts-container">
-        <a class="account-link email-link" href="mailto:abidindrd@gmail.com">Email</a>
-        <span id="email-text">abidindrd@gmail.com</span>
+        <a class="account-link email-link" href="mailto:{{author.email}}">Email</a>
+        <span id="email-text">{{author.email}}</span>
         
-        
-          <a class="account-link" target="_blank" href="https://github.com/abdrd">GitHub</a>
-        
-          <a class="account-link" target="_blank" href="https://linkedin.com/in/abdrd">LinkedIn</a>
-        
-          <a class="account-link" target="_blank" href="https://x.com/abidindrd_">X</a>
-        
+        {% for k, v in author.social %}
+          <a class="account-link" target="_blank" href="{{v}}">{{k}}</a>
+        {% endfor %}
     </div>
     
     <div class="title-container">
         <h2>Posts</h2>
     </div>
     <div id="posts-container">
-        
-          
+        {% if posts %}
+          {% for post in posts %}
             <div>
-              <a class="post" href="minimal-vscode">Minimal VSCode/VSCodium Config</a>
-              <span class="date">10-11-2024</span>
+              <a class="post" href="{{post.url_path}}">{{post.title}}</a>
+              <span class="date">{{post.date}}</span>
             </div>
-          
-            <div>
-              <a class="post" href="creating-hardlinks-using-go">Creating Hardlinks Using Go</a>
-              <span class="date">21-05-2023</span>
-            </div>
-          
-        
+          {% endfor %}
+        {% else %}
+          <h2>No posts</h2>
+        {% endif %}
     </div>
 
     <script>
