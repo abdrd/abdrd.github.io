@@ -20,7 +20,18 @@ CONFIG = {
         "GITHUB": "https://github.com/abdrd",
         "X": "https://x.com/abidindrd_",
         "LINKEDIN": "https://linkedin.com/in/abdrd",
-        "ABOUT": "I am a programmer from Turkiye."
+        "ABOUT": """I'm a programmer from Turkiye. I write blog posts about things I've recently learned, projects I've worked on, or notes I want to keep.
+                    I want to become a good backend programmer and am also exploring systems programming. Right now, I'm building a compiler for my own programming language.
+
+                    I started programming in mid-September 2020. I was bored, and the idea came to me. I started out with Python, and I mainly use Go, but I'm not obsessed with programming languages. I can quickly learn and start using any language to build something. Go is a great language because it is small and has great tooling and documentation.
+
+                    As you can probably tell from this website, I value simplicity and practicality in design.
+
+                    My birthday is October 22nd.
+                    
+                    I hope this blog is useful for at least one person.
+
+"""
     }
 }
 

@@ -47,12 +47,20 @@
 <body class="container">
     <h1 id="title">{{author.name}}</h1>
     <div class="title-container">
-        <h2>Contact</h2>
+        <h2>About</h2>
+        <p></p>
+    </div>
+    <div id="about-container">
+        <p>{{author.introduction | replace("\n", "<br>")}}</p>
+        
+        <p>This is my e-mail address: <span id="email-text">{{author.email}}</span></p>
+        <p>You can also click the link below to send an e-mail to me.</p>
+        <a class="account-link email-link" href="mailto:{{author.email}}">Email</a>
+    </div>
+    <div class="title-container">
+        <h2>Social media</h2>
     </div>
     <div id="accounts-container">
-        <a class="account-link email-link" href="mailto:{{author.email}}">Email</a>
-        <span id="email-text">{{author.email}}</span>
-        
         {% for k, v in author.social %}
           <a class="account-link" target="_blank" href="{{v}}">{{k}}</a>
         {% endfor %}
