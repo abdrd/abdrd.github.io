@@ -7,7 +7,7 @@ keywords:
 date: 21-05-2023
 ---
 
-# Creating hard links in Go (implementing a tiny subset of `ln`)
+# Creating hard links using Go
 
 There are two kinds of links on a Linux system: A hard link and a soft link (or a symbolic link).
 
