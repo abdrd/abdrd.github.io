@@ -19,7 +19,7 @@ Each file in a file system has an associated structure stored on the disk called
 
 The inode structure includes metadata such as the date of creation, last modification time, owner id, permissions (read/write/execute), data block address (a pointer to the block(s) in which the bytes live), inode number, etc.
 
-Directories also have an inode structure, but theirs is a bit different than that of a file's. The most significant difference is that a directory's inode contains a list of directory entries (Different implementations might use different data structures to hold directory entries. I said "a list" to make the explanation simpler). A directory entry is, in its simplest form, a pair of human-friendly name of the file and an inode number.
+Directories also have an inode structure, but theirs is a bit different than that of a file's. The most significant difference is that a directory's inode contains a list of directory entries. A directory entry is, in its simplest form, a pair of human-friendly name of the file and an inode number.
 
 ```c
 typedef struct { string name; int inode; } Dir_Entry;
@@ -45,7 +45,7 @@ typedef struct {
 } File_Inode;
 ```
 
-When you double-click on a text file to read it, or when you use `cat` to read a file; under the hood, the operating system (the file system, more specifically) has to do a few things. 
+When you double-click on a text file to read it, or when you use `cat` to read a file; the operating system (the file system, more specifically) has to do a few things. 
 
 Suppose the file `hello.txt` lives at the location of `/home/btlgs/Documents/txt/hello.txt`. The operating system has to find the inode of the file called `hello.txt` located at that specific location. The reason why it has to find the inode (structure) is because the OS doesn't know where in the disk `hello.txt` resides. That information is stored in the inode (inode tells in which block(s) the data lives on the disk). To find it, the OS first reads directory entries of `/` to look for the `home` directory. If it is not there, an error is returned. If it is there, it grabs the inode number of `/home/` and, by using that number, reads the inode *structure* of `/home/` to search the list of directory entries of `/home/` to find the `btlgs` directory. This goes on like that till the file is found. 
 

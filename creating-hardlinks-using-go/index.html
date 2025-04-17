@@ -32,7 +32,7 @@
 
 <p>The inode structure includes metadata such as the date of creation, last modification time, owner id, permissions (read/write/execute), data block address (a pointer to the block(s) in which the bytes live), inode number, etc.</p>
 
-<p>Directories also have an inode structure, but theirs is a bit different than that of a file's. The most significant difference is that a directory's inode contains a list of directory entries (Different implementations might use different data structures to hold directory entries. I said "a list" to make the explanation simpler). A directory entry is, in its simplest form, a pair of human-friendly name of the file and an inode number.</p>
+<p>Directories also have an inode structure, but theirs is a bit different than that of a file's. The most significant difference is that a directory's inode contains a list of directory entries. A directory entry is, in its simplest form, a pair of human-friendly name of the file and an inode number.</p>
 
 <div class="codehilite">
 <pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">inode</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">Dir_Entry</span><span class="p">;</span>
@@ -59,7 +59,7 @@
 </code></pre>
 </div>
 
-<p>When you double-click on a text file to read it, or when you use <code>cat</code> to read a file; under the hood, the operating system (the file system, more specifically) has to do a few things. </p>
+<p>When you double-click on a text file to read it, or when you use <code>cat</code> to read a file; the operating system (the file system, more specifically) has to do a few things. </p>
 
 <p>Suppose the file <code>hello.txt</code> lives at the location of <code>/home/btlgs/Documents/txt/hello.txt</code>. The operating system has to find the inode of the file called <code>hello.txt</code> located at that specific location. The reason why it has to find the inode (structure) is because the OS doesn't know where in the disk <code>hello.txt</code> resides. That information is stored in the inode (inode tells in which block(s) the data lives on the disk). To find it, the OS first reads directory entries of <code>/</code> to look for the <code>home</code> directory. If it is not there, an error is returned. If it is there, it grabs the inode number of <code>/home/</code> and, by using that number, reads the inode <em>structure</em> of <code>/home/</code> to search the list of directory entries of <code>/home/</code> to find the <code>btlgs</code> directory. This goes on like that till the file is found. </p>
 
@@ -123,7 +123,7 @@ Device: 802h/2050d  Inode: 2101090     Links: 1
 
 <script src="https://gist.github.com/abdrd/23934b0f250389d4a290014feac3d106.js"></script>
 
-<p>We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the <code>makeHardlink</code> function defined below. That function relies on a system call called <code>linkat</code> that basically does what we want: It creates hard links. Since the <code>linkat</code> function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the <code>syscall.Link</code> function in the standard library that uses <code>//sys</code> directives to make it possible to use the <code>linkat</code> function. See <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259">syscall.Link</a>. <code>//sys</code> directives are used to tell the compiler to generate necessary <code>.c</code>, <code>.h</code>, and <code>.go</code> files.). </p>
+<p>We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the <code>makeHardlink</code> function defined below. That function relies on a system call called <code>linkat</code> that basically does what we want: It creates hard links. Since the <code>linkat</code> function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the <code>syscall.Link</code> function in the standard library that uses <code>//sys</code> directives to make it possible to use the <code>linkat</code> function. See <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259" target="_blank">syscall.Link</a>. <code>//sys</code> directives are used to tell the compiler to generate necessary <code>.c</code>, <code>.h</code>, and <code>.go</code> files.). </p>
 
 <div class="codehilite">
 <pre><span></span><code><span class="cm">/*</span>
@@ -148,5 +148,6 @@ Device: 802h/2050d  Inode: 2101090     Links: 1
       <a id="comment-link" href="mailto:abidindrd@gmail.com?subject=My comment on your post: 'Creating Hardlinks Using Go'">
         Leave a comment
       </a>
+      
   </body>
 </html>

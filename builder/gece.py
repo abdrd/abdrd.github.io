@@ -4,6 +4,7 @@ A script to generate my blog.
 
 import os, sys, re, markdown2, yaml, shutil
 from dataclasses import dataclass
+from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from pygments import highlight
@@ -66,10 +67,13 @@ def main():
         if not match:
             gece_error(f"frontmatter not found in '{file_path}'")
 
+        html = markdown2.markdown(match.group(2), extras=["fenced-code-blocks", "code-color"])
+        # add target="_blank" to all links
+        html = re.sub(r'(<a\s+[^>]*)(>)', r'\1 target="_blank"\2', html)
+
         cm = CompiledMarkdown(name=file_name,
                     frontmatter=yaml.safe_load(match.group(1)),
-                    html=markdown2.markdown(
-                        match.group(2), extras=["fenced-code-blocks", "code-color"]))
+                    html=html)
 
         if "title" not in cm.frontmatter and "date" not in cm.frontmatter:
             gece_error(f"'title' and 'date' fields are missing from the frontmatter in '{file_path}'")
@@ -84,14 +88,17 @@ def main():
     global_ctx = {
         "index_title": "[BLOG] Abidin Durdu - abdrd",
 
-        "posts": [
-                {
-                    "url_path": os.path.splitext(md.name)[0],
-                    **md.frontmatter,
-                } for md in compiled_mds
-            ],
-           
-        "author": {
+            "posts":sorted(
+                    [
+                        {
+                            "url_path": os.path.splitext(md.name)[0],
+                            **md.frontmatter,
+                        } for md in compiled_mds
+                    ],
+                    key=lambda x: datetime.strptime(x["date"], "%d-%m-%Y"),
+                    reverse=True
+                ),
+            "author": {
             "name": CONFIG["AUTHOR"]["NAME"],
             "email": CONFIG["AUTHOR"]["EMAIL"],
             "social": [
