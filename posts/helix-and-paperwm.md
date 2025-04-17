@@ -38,7 +38,7 @@ And here is a picture of my theme:
 
 ![Acme2 Helix theme](/assets/acme2_helix.png)
 
-Here is my config.
+My config is a gist.
 
 [Gist](https://gist.github.com/abdrd/6cde7efc4c47137537f29078de3ed3ab)
 
@@ -70,7 +70,7 @@ GNOME creating obstacles because of security reasons. I am not sure.***
 
 PaperWM is great. I think it is even better than i3.
 
-Here is my settings:
+The settings:
 
 ```
 General
