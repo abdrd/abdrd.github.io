@@ -111,8 +111,6 @@ Keybindings
 
 Switch to the left window  : Ctrl+Ğ
 Switch to the right window : Ctrl+Ü
-Switch to the window above : Shift+Ctrl+Ğ
-Switch to the window above : Shift+Ctrl+Ü
 Toggle fullscreen          : Shift+Ctrl+;
 Increment window width     : Shift+Ctrl+!     (Ctrl+Shift+1)
 Decrement window width     : Shift+Ctrl+'     (Ctrl+Shift+2)
