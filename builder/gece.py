@@ -129,7 +129,8 @@ def main():
     def render_posts(global_ctx, posts: list[CompiledMarkdown]) -> list[RenderedPost]:
         template = jenv.get_template("post.html")
         return [RenderedPost(url_path=os.path.splitext(post.name)[0],
-                             html=template.render(**global_ctx, **post.frontmatter, content=post.html)) for post in posts]
+                             html=template.render(**global_ctx,
+                                                    **post.frontmatter, content=post.html)) for post in posts]
 
     @dataclass
     class Builder:
