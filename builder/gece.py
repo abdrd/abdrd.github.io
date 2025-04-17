@@ -18,9 +18,8 @@ CONFIG = {
     "AUTHOR": {
         "NAME": "Abidin Durdu",
         "EMAIL": "abidindrd@gmail.com",
-        "GITHUB": "https://github.com/abdrd",
-        "X": "https://x.com/abidindrd_",
-        "LINKEDIN": "https://linkedin.com/in/abdrd",
+        "SOCIAL": [("GitHub", "https://github.com/abdrd"),
+                    ("LinkedIn", "https://linkedin.com/in/abdrd")],
         "ABOUT": """I'm a programmer from Turkiye. I write blog posts about things I've recently learned, projects I've worked on, or notes I want to keep.
                     I want to become a good backend programmer and am also exploring systems programming. Right now, I'm building a compiler for my own programming language.
 
@@ -101,12 +100,7 @@ def main():
             "author": {
             "name": CONFIG["AUTHOR"]["NAME"],
             "email": CONFIG["AUTHOR"]["EMAIL"],
-            "social": [
-                ("GitHub", CONFIG["AUTHOR"]["GITHUB"]),
-                ("LinkedIn", CONFIG["AUTHOR"]["LINKEDIN"]),
-                ("X", CONFIG["AUTHOR"]["X"])
-            ],
-
+            "social": CONFIG["AUTHOR"]["SOCIAL"],
             "introduction": CONFIG["AUTHOR"]["ABOUT"]
         }
     }

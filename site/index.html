@@ -59,8 +59,8 @@
         <h2>Social media</h2>
     </div>
     <div id="accounts-container">
-        {% for k, v in author.social %}
-          <a class="account-link" target="_blank" href="{{v}}">{{k}}</a>
+        {% for acc in author.social %}
+          <a class="account-link" target="_blank" href="{{acc[1]}}">{{acc[0]}}</a>
         {% endfor %}
     </div>
     
