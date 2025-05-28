@@ -20,18 +20,6 @@ CONFIG = {
         "EMAIL": "abidindrd@gmail.com",
         "SOCIAL": [("GitHub", "https://github.com/abdrd"),
                     ("LinkedIn", "https://linkedin.com/in/abdrd")],
-        "ABOUT": """I'm a programmer from Turkiye. I write blog posts about things I've recently learned, projects I've worked on, or notes I want to keep.
-                    I want to become a good backend programmer and am also exploring systems programming. Right now, I'm building a compiler for my own programming language.
-
-                    I started programming in mid-September 2020. I was bored, and the idea came to me. I started out with Python, and I mainly use Go, but I'm not obsessed with programming languages. I can quickly learn and start using any language to build something. Go is a great language because it is small and has great tooling and documentation.
-
-                    As you can probably tell from this website, I value simplicity and practicality in design.
-
-                    My birthday is October 22nd.
-                    
-                    I hope this blog is useful for at least one person.
-
-"""
     }
 }
 
@@ -66,7 +54,7 @@ def main():
         if not match:
             gece_error(f"frontmatter not found in '{file_path}'")
 
-        html = markdown2.markdown(match.group(2), extras=["fenced-code-blocks", "code-color"])
+        html = markdown2.markdown(match.group(2), extras=["fenced-code-blocks"])
         # add target="_blank" to all links
         html = re.sub(r'(<a\s+[^>]*)(>)', r'\1 target="_blank"\2', html)
 
@@ -101,7 +89,6 @@ def main():
             "name": CONFIG["AUTHOR"]["NAME"],
             "email": CONFIG["AUTHOR"]["EMAIL"],
             "social": CONFIG["AUTHOR"]["SOCIAL"],
-            "introduction": CONFIG["AUTHOR"]["ABOUT"]
         }
     }
 

@@ -105,10 +105,64 @@ Sizes of symbolic links are equal to the length of linked-to file's name, plus t
 
 ### How to build a tool to create hard links
 
-**Note: There is a way easier method of building this same program using a standard library function. I just wanted to use cgo.**
+*Note: There is a way easier method of building this same program using a standard library function. I just wanted to use cgo.*
 
 Code:
-<script src="https://gist.github.com/abdrd/23934b0f250389d4a290014feac3d106.js"></script>
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+	"syscall"
+)
+
+/*
+#include <fcntl.h>
+#include <unistd.h>
+
+int _linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags) {
+    return linkat(olddirfd, oldpath, newdirfd, newpath, flags);
+}
+*/
+import "C"
+
+func main() {
+	osArgs, osArgsLen := os.Args, len(os.Args)
+	if osArgsLen != 3 {
+		fmt.Println("hardlink: 3 arguments needed")
+		os.Exit(1)
+	}
+
+	origFile, hlinkFile := osArgs[1], osArgs[2]
+
+	_, err := os.Open(origFile)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Printf("File %s does not exist\n", origFile)
+			os.Exit(1)
+		}
+		fmt.Printf("Unknown error: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	makeHardlink(origFile, hlinkFile)
+}
+
+func makeHardlink(origFilePath, newFilePath string) {
+	origFilePathC := C.CString(origFilePath)
+	newFilePathC := C.CString(newFilePath)
+	
+	result := C._linkat(C.AT_FDCWD, origFilePathC, C.AT_FDCWD, newFilePathC, 0)
+	fmt.Println(result)
+	if result < 0 {
+		fmt.Print("errno: ")
+		fmt.Println(syscall.Errno(-result))
+		fmt.Println("Error creating hardlink")
+		os.Exit(1)
+	}
+}
+```
 
 We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the `makeHardlink` function defined below. That function relies on a system call called `linkat` that basically does what we want: It creates hard links. Since the `linkat` function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the `syscall.Link` function in the standard library that uses `//sys` directives to make it possible to use the `linkat` function. See [syscall.Link](https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259). `//sys` directives are used to tell the compiler to generate necessary `.c`, `.h`, and `.go` files.). 
 

@@ -65,8 +65,8 @@ I came across PaperWM, and I love it. One thing I wish it supported is a proper 
 If I remember correctly, I found an XML file that resembled something that contained my settings.
 It is not a big problem. I saved my settings in a plain text file.
 
-***I remember asking ChatGPT why PaperWM does not have a config file, and it said something about
-GNOME creating obstacles because of security reasons. I am not sure.***
+*I remember asking ChatGPT why PaperWM does not have a config file, and it said something about
+GNOME creating obstacles because of security reasons.*
 
 PaperWM is great. I think it is even better than i3.
 

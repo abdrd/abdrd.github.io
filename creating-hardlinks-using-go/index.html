@@ -1,25 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      
-      <title>Creating Hardlinks Using Go</title>
-      
-      <meta name="keywords" content="">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Poly:ital@0;1&display=swap" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-      <link rel="stylesheet" href="/assets/pygments.css" />
-      <link rel="stylesheet" href="/assets/post.css" />
-  </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <body class="container" id="top">
-      <a id="home-link" href="/">Home page</a>
-      
-      <h1>Creating hard links using Go</h1>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poly:ital@0;1&display=swap" rel="stylesheet">
+
+     
+    <link rel="stylesheet" href="/assets/style.css" />
+    
+    <link rel="stylesheet" href="/assets/pygments-light.css">
+    <link rel="stylesheet" href="/assets/pygments-dark.css" disabled>
+            
+    <title>Creating Hardlinks Using Go</title>
+    
+<meta name="keywords" content="">
+
+</head>
+
+<body class="container " id="top">        
+    
+<nav>
+    <a class="nav-link" href="/">Home page</a>
+    <a href="#" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode">Dark theme</a>
+</nav>
+
+    
+    
+    
+    <main>
+        
+    <div id="post-date-container">
+        <p id="post-date">21-05-2023</p>
+    </div>
+
+    <h1>Creating hard links using Go</h1>
 
 <p>There are two kinds of links on a Linux system: A hard link and a soft link (or a symbolic link).</p>
 
@@ -116,11 +134,66 @@ Device: 802h/2050d  Inode: 2101090     Links: 1
 
 <h3>How to build a tool to create hard links</h3>
 
-<p><strong>Note: There is a way easier method of building this same program using a standard library function. I just wanted to use cgo.</strong></p>
+<p><em>Note: There is a way easier method of building this same program using a standard library function. I just wanted to use cgo.</em></p>
 
 <p>Code:</p>
 
-<script src="https://gist.github.com/abdrd/23934b0f250389d4a290014feac3d106.js"></script>
+<div class="codehilite">
+<pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span>
+<span class="w">    </span><span class="s">&quot;syscall&quot;</span>
+<span class="p">)</span>
+
+<span class="cm">/*</span>
+<span class="cm">#include &lt;fcntl.h&gt;</span>
+<span class="cm">#include &lt;unistd.h&gt;</span>
+
+<span class="cm">int _linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags) {</span>
+<span class="cm">    return linkat(olddirfd, oldpath, newdirfd, newpath, flags);</span>
+<span class="cm">}</span>
+<span class="cm">*/</span>
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;C&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">osArgs</span><span class="p">,</span><span class="w"> </span><span class="nx">osArgsLen</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">osArgsLen</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;hardlink: 3 arguments needed&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">origFile</span><span class="p">,</span><span class="w"> </span><span class="nx">hlinkFile</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">osArgs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nx">osArgs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="w">    </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">origFile</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">IsNotExist</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;File %s does not exist\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">origFile</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Unknown error: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">        </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">makeHardlink</span><span class="p">(</span><span class="nx">origFile</span><span class="p">,</span><span class="w"> </span><span class="nx">hlinkFile</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">makeHardlink</span><span class="p">(</span><span class="nx">origFilePath</span><span class="p">,</span><span class="w"> </span><span class="nx">newFilePath</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">origFilePathC</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">C</span><span class="p">.</span><span class="nx">CString</span><span class="p">(</span><span class="nx">origFilePath</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">newFilePathC</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">C</span><span class="p">.</span><span class="nx">CString</span><span class="p">(</span><span class="nx">newFilePath</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">C</span><span class="p">.</span><span class="nx">_linkat</span><span class="p">(</span><span class="nx">C</span><span class="p">.</span><span class="nx">AT_FDCWD</span><span class="p">,</span><span class="w"> </span><span class="nx">origFilePathC</span><span class="p">,</span><span class="w"> </span><span class="nx">C</span><span class="p">.</span><span class="nx">AT_FDCWD</span><span class="p">,</span><span class="w"> </span><span class="nx">newFilePathC</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Print</span><span class="p">(</span><span class="s">&quot;errno: &quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">syscall</span><span class="p">.</span><span class="nx">Errno</span><span class="p">(</span><span class="o">-</span><span class="nx">result</span><span class="p">))</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error creating hardlink&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
 
 <p>We first parse command line arguments. Then, we make sure the file actually exists on the file system; if it does not, we print out an error message and exit the process. After that we call the <code>makeHardlink</code> function defined below. That function relies on a system call called <code>linkat</code> that basically does what we want: It creates hard links. Since the <code>linkat</code> function is not a part of the standard library, we use Go's C interoperability feature called cgo (There's the <code>syscall.Link</code> function in the standard library that uses <code>//sys</code> directives to make it possible to use the <code>linkat</code> function. See <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.20.4:src/syscall/syscall_linux.go;l=259" target="_blank">syscall.Link</a>. <code>//sys</code> directives are used to tell the compiler to generate necessary <code>.c</code>, <code>.h</code>, and <code>.go</code> files.). </p>
 
@@ -142,11 +215,29 @@ Device: 802h/2050d  Inode: 2101090     Links: 1
 
 <h3>That's it. Take care. See you next time.</h3>
 
-      
-      <a id="top-of-the-post-link" href="#top">Top</a>
-      <a id="comment-link" href="mailto:abidindrd@gmail.com?subject=My comment on your post: 'Creating Hardlinks Using Go'">
+
+    </main>
+    
+    
+<footer>
+    <a class="nav-link" href="#top">Top</a>
+    <a class="nav-link comment-link" href="mailto:abidindrd@gmail.com?subject=My comment on your post: 'Creating Hardlinks Using Go'">
         Leave a comment
-      </a>
-      
-  </body>
+    </a>
+</footer>
+<script>
+  document.querySelectorAll('#post-date').forEach(el => {
+    const raw = el.textContent.trim();
+    const [day, month, year] = raw.split('-');
+    const isoDate = `${year}-${month}-${day}`;
+    const date = new Date(isoDate);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    el.textContent = date.toLocaleDateString('en-US', options);
+  });
+</script>
+
+    
+    <script src="/assets/theme-toggle.js"></script>
+    
+</body>
 </html>
