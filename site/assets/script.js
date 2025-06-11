@@ -1,11 +1,17 @@
-const themeToggle = document.getElementById('theme-toggle');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 function initializeTheme() {
     const savedTheme = getStoredTheme();
+
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+        setTheme(savedTheme);
+        return;
+    }
+
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const hour = new Date().getHours();
     const isNight = hour < 6 || hour >= 18;
-    const shouldUseDark = savedTheme === 'dark' || (!savedTheme && (prefersDark || isNight));
+    const shouldUseDark = prefersDark || isNight;
 
     setTheme(shouldUseDark ? 'dark' : 'light');
 }
@@ -29,16 +35,15 @@ function setStoredTheme(theme) {
 function setTheme(theme) {
     const isDark = theme === 'dark';
     document.documentElement.classList.toggle('dark', isDark);
-    themeToggle.textContent = isDark ? 'Light theme' : 'Dark theme';
-    themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-
-    const lightStyle = document.querySelector('link[href="/assets/pygments-light.css"]');
-    const darkStyle = document.querySelector('link[href="/assets/pygments-dark.css"]');
     
-    if (lightStyle && darkStyle) {
-        lightStyle.disabled = isDark;
-        darkStyle.disabled = !isDark;
-    }
+    themeToggleBtn.textContent = isDark ? '☀' : '☾';
+    themeToggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+
+    const codeThemeLight = document.getElementById("code-theme-light");
+    const codeThemeDark = document.getElementById("code-theme-dark");
+
+    codeThemeLight.disabled = isDark;
+    codeThemeDark.disabled = !(isDark);
 }
 
 function toggleTheme() {
@@ -48,7 +53,7 @@ function toggleTheme() {
     setStoredTheme(newTheme);
 }
 
-themeToggle.addEventListener('click', (e) => {
+themeToggleBtn.addEventListener('click', (e) => {
     e.preventDefault();
     toggleTheme();
 });

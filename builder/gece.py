@@ -7,10 +7,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-
 CONFIG = {
     "VERSION": "0.1.0",
     "POSTS_DIR": "posts",
@@ -99,23 +95,33 @@ def main():
         autoescape=False
     )
 
-    def render_index(global_ctx) -> str:
-        return jenv.get_template("index.html").render(**global_ctx)
-    
     @dataclass
     class RenderedPost:
         url_path: str
         html: str       
-                    
+        
     def render_posts(global_ctx, posts: list[CompiledMarkdown]) -> list[RenderedPost]:
         template = jenv.get_template("post.html")
         return [RenderedPost(url_path=os.path.splitext(post.name)[0],
                              html=template.render(**global_ctx,
                                                     **post.frontmatter, content=post.html)) for post in posts]
 
+    # TODO rewrite the generator to be more general-purpose.
+   
+    def render_index(global_ctx) -> str:
+        return jenv.get_template("index.html").render(**global_ctx)
+    
+    def render_about(global_ctx) -> str:
+        return jenv.get_template("about.html").render(**global_ctx)
+
+    def render_contact(global_ctx) -> str:
+        return jenv.get_template("contact.html").render(**global_ctx)
+
     @dataclass
     class Builder:
         index: str
+        about: str
+        contact: str
         posts: list[RenderedPost]
 
         def _copy_assets(self):
@@ -127,6 +133,15 @@ def main():
             
 
         def write_to_disk(self):
+            os.makedirs("about", exist_ok=True)
+            os.makedirs("contact", exist_ok=True)
+
+            with open(os.path.join("about", "index.html"), "w") as f:
+                f.write(self.about)
+                
+            with open(os.path.join("contact", "index.html"), "w") as f:
+                f.write(self.contact)
+            
             with open("index.html", "w") as f:
                 f.write(self.index)
 
@@ -139,6 +154,8 @@ def main():
             
 
     builder = Builder(index=render_index(global_ctx),
+                        about=render_about(global_ctx),
+                        contact=render_contact(global_ctx),
                         posts=render_posts(global_ctx, compiled_mds))
     
     builder.write_to_disk()

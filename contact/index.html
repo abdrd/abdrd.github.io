@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>{{title}}</title>
+  <title></title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
 
@@ -24,10 +24,37 @@
 <body>
 
   <div id="container">
-    {% include "nav.html" %}
+    <nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <!-- <li><a href="/projects">Projects</a></li> -->
+  </ul>
+  <div id="nav-right">
+    <button id="theme-toggle-btn">☾</button>
+    <div id="date-container">
+      <p></p>
+    </div>
+  </div>
+</nav>
 
-    {% block content %} {% endblock %}
-    {% block footer %}  {% endblock %}
+    
+
+<h1>Contact</h1>
+
+<ul>
+<li>abidindrd@gmail.com
+  <ul>
+    <li><a href="mailto:abidindrd@gmail.com">Send e-mail</a></li>
+  </ul>
+</li>
+<li><a href="https://github.com/abdrd">github.com/abdrd</a></li>
+<li><a href="https://linkedin.com/in/abdrd/">linkedin.com/in/abdrd</a></li>
+</ul>
+
+
+      
   </div>
 
   <script src="/assets/script.js"></script>
@@ -38,6 +65,6 @@
     hljs.highlightAll()
   </script>
 
-  {% block scripts %} {% endblock %}
+   
 </body>
 </html>

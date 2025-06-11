@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Minimal VSCode/VSCodium Config</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poly:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-     
-    <link rel="stylesheet" href="/assets/style.css" />
-    
-    <link rel="stylesheet" href="/assets/pygments-light.css">
-    <link rel="stylesheet" href="/assets/pygments-dark.css" disabled>
-            
-    <title>Minimal VSCode/VSCodium Config</title>
-    
-<meta name="keywords" content="editor, vscode, vscodium, config, development-environment">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poly:ital@0;1&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" type="text/css" href="/assets/style.css" />
+  <link rel="icon" href="favicon.ico">
+
+  <!-- highligh.js light theme -->
+  <link id="code-theme-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/idea.min.css">
+
+  <!-- highlight.js dark theme -->
+  <link id="code-theme-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/stackoverflow-dark.min.css">
 </head>
+<body>
 
-<body class="container " id="top">        
-    
-<nav>
-    <a class="nav-link" href="/">Home page</a>
-    <a href="#" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode">Dark theme</a>
+  <div id="container">
+    <nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <!-- <li><a href="/projects">Projects</a></li> -->
+  </ul>
+  <div id="nav-right">
+    <button id="theme-toggle-btn">☾</button>
+    <div id="date-container">
+      <p>10-11-2024</p>
+    </div>
+  </div>
 </nav>
 
     
-    
-    
     <main>
-        
-    <div id="post-date-container">
-        <p id="post-date">10-11-2024</p>
-    </div>
-
-    <p>I created a simple configuration for VSCode/VSCodium. This configuration hides all the things that annoy me. It hides the title bar, status bar and any other bar. It hides the mini map. It removes the margin of line numbers. It removes file tabs.</p>
+      <article id="post">
+        <p>I created a simple configuration for VSCode/VSCodium. This configuration hides all the things that annoy me. It hides the title bar, status bar and any other bar. It hides the mini map. It removes the margin of line numbers. It removes file tabs.</p>
 
 <p>I navigate my projects with keyboard shortcuts. For example, if I want to jump to a variable or a function, I press <code>Ctrl+Shift+O</code>. If I want to jump to the end of a line I press <code>fn+right</code>. If I want to navigate between the words of a camelCase identifier, I press <code>alt+left</code> (or <code>+right</code>). I can press <code>Ctrl+W</code> to close a window. I can use <code>Ctrl+Tab</code> to switch between windows or I can press <code>Ctrl+P</code> to select a file. I can ...</p>
 
@@ -54,29 +59,40 @@
 
 <p><a href="https://gist.github.com/abdrd/2f13dc5c91a8732e95eb3af3d5255cfd" target="_blank">https://gist.github.com/abdrd/2f13dc5c91a8732e95eb3af3d5255cfd</a></p>
 
-
+      </article>
     </main>
-    
+
     
 <footer>
-    <a class="nav-link" href="#top">Top</a>
-    <a class="nav-link comment-link" href="mailto:abidindrd@gmail.com?subject=My comment on your post: 'Minimal VSCode/VSCodium Config'">
-        Leave a comment
-    </a>
+<div id="post-footer-container">
+  <a href="#top">Top</a>
+  <a href="mailto:abidindrd@gmail.com?subject=My comment on your post 'Minimal VSCode/VSCodium Config'">
+      Leave a comment
+  </a>
+</div>
 </footer>
+
+  </div>
+
+  <script src="/assets/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+  <script>
+    hljs.configure({ ignoreUnescapedHTML: true });
+    hljs.highlightAll()
+  </script>
+
+  
 <script>
-  document.querySelectorAll('#post-date').forEach(el => {
-    const raw = el.textContent.trim();
-    const [day, month, year] = raw.split('-');
-    const isoDate = `${year}-${month}-${day}`;
-    const date = new Date(isoDate);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    el.textContent = date.toLocaleDateString('en-US', options);
-  });
+  const el = document.querySelector("#date-container > p");
+  
+  const raw = el.textContent.trim();
+  const [day, month, year] = raw.split('-').map(Number);
+
+  const date = new Date(year, month - 1, day);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  el.textContent = date.toLocaleDateString('en-US', options);
 </script>
 
-    
-    <script src="/assets/theme-toggle.js"></script>
-    
 </body>
 </html>

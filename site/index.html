@@ -1,67 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}{{index_title}}{% endblock %}
-
-{% block header %}
-<header>
-    <nav>
-        {% include "theme_toggle.html" %}
-    </nav>
-    <h1 class="page-title">{{author.name}}</h1>
-</header>
-{% endblock %}
-
 {% block content %}
-<section class="about-section">
-    <h2 class="section-title">About</h2>
-    <div class="content-section">
-        <p>
-            I am a programmer from Turkiye. I started programming in September 2020 because
-            I was bored during the lockdown.
-        </p>
-        
-        <p>
-        In this blog, you'll find posts about my projects,
-        things I've learned, and other programming-related content.
-        </p>                
-        <p>This is my e-mail address: <span id="email-text">{{author.email}}</span></p>
-        <p>You can also click the link below to send an e-mail to me.</p>
-        
-        <div id="contact-container">
-            <a href="mailto:{{author.email}}">Email</a>
-            {% for acc in author.social %}
-                <a target="_blank" href="{{acc[1]}}">{{acc[0]}}</a>
-            {% endfor %}
-        </div>
+<main>
+  <article>
+    <h1>
+      Abidin Durdu
+    </h1>
+    <p>
+      <i>Welcome</i> to my blog. Check out the links above or read my posts below.
+    </p>
+    {% if posts %}
+    <h2>
+      Posts
+    </h2>
+    <div id="post-list-container">
+      {% for post in posts %}
+          <a class="post-link" href="{{post.url_path}}">
+              {{post.title}}
+          </a>
+      {% endfor %}
     </div>
-</section>
-
-<section class="posts-section">
-    <h2 class="section-title">Posts</h2>
-    <div class="posts-list">
-        {% if posts %}
-        {% for post in posts %}
-            <a class="post-link" href="{{post.url_path}}">
-                {{post.title}}
-            </a>
-        {% endfor %}
-        {% else %}
-        <h2>No posts</h2>
-        {% endif %}
-    </div>
-</section>
-{% endblock %}
-
-{% block scripts %}
-<script>
-  document.getElementById('email-text').addEventListener('click', () => {
-    const range = document.createRange();
-    const selection = window.getSelection();
-    const span = document.getElementById('email-text');
-
-    range.selectNodeContents(span);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  });
-</script>
+    {% else %}
+    <h2>No posts</h2>
+    {% endif %}
+  </article>
+</main>
 {% endblock %}

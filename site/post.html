@@ -1,45 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}{{title}}{% endblock %}
-
-{% block meta %}
-<meta name="keywords" content="{{tags | join(', ')}}">
-{% endblock %}
-
-{% block additional_css %} {% endblock %}
-
-{% block body_id %}id="top"{% endblock %}
-
-{% block navigation %}
-<nav>
-    <a class="nav-link" href="/">Home page</a>
-    {% include "theme_toggle.html" %}
-</nav>
-{% endblock %}
-
 {% block content %}
-    <div id="post-date-container">
-        <p id="post-date">{{date}}</p>
-    </div>
-
-    {{content}}
+    <main>
+      <article id="post">
+        {{content}}
+      </article>
+    </main>
 {% endblock %}
 
 {% block footer %}
 <footer>
-    <a class="nav-link" href="#top">Top</a>
-    <a class="nav-link comment-link" href="mailto:{{author.email}}?subject=My comment on your post: '{{title}}'">
-        Leave a comment
-    </a>
+<div id="post-footer-container">
+  <a href="#top">Top</a>
+  <a href="mailto:{{author.email}}?subject=My comment on your post '{{title}}'">
+      Leave a comment
+  </a>
+</div>
 </footer>
+{% endblock %}
+
+{% block scripts %}
 <script>
-  document.querySelectorAll('#post-date').forEach(el => {
-    const raw = el.textContent.trim();
-    const [day, month, year] = raw.split('-');
-    const isoDate = `${year}-${month}-${day}`;
-    const date = new Date(isoDate);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    el.textContent = date.toLocaleDateString('en-US', options);
-  });
+  const el = document.querySelector("#date-container > p");
+  
+  const raw = el.textContent.trim();
+  const [day, month, year] = raw.split('-').map(Number);
+
+  const date = new Date(year, month - 1, day);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  el.textContent = date.toLocaleDateString('en-US', options);
 </script>
 {% endblock %}
