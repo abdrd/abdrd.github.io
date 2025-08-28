@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valid parentheses problem</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poly:ital@0;1&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/style.css" />
+  <link rel="icon" href="favicon.ico">
+
+  <!-- highligh.js light theme -->
+  <link id="code-theme-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/idea.min.css">
+
+  <!-- highlight.js dark theme -->
+  <link id="code-theme-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/stackoverflow-dark.min.css">
+</head>
+<body>
+
+  <div id="container">
+    <nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <!-- <li><a href="/projects">Projects</a></li> -->
+  </ul>
+  <div id="nav-right">
+    <button id="theme-toggle-btn">☾</button>
+    <div id="date-container">
+      <p>27-08-2025</p>
+    </div>
+  </div>
+</nav>
+
+    
+    <main>
+      <article id="post">
+        <p><a href="https://leetcode.com/problems/valid-parentheses/" target="_blank">The valid parentheses problem</a> is an easy
+problem to solve. The algorithm is:</p>
+
+<pre><code>stack = []
+for every char in str
+  if char is an opening parenthesis
+    stack.push (char)
+
+  if char is a closing parenthesis
+    if stack is empty
+      error ()
+
+    top = stack.pop ()
+    if char does not match top
+      error ()
+
+if stack is not empty
+  error ()
+
+success ()
+</code></pre>
+
+<p>When I thought of ways to reduce the memory usage of this algorithm, bit-packing came to my mind.</p>
+
+<p>Using a <code>rune</code> (32-bit integer) for each parenthesis seemed wasteful. So, I
+decided to use an 8-bit integer, but the problem was, I'd need to use at least
+7 bits to represent a parenthesis, because the biggest ASCII code-point I needed
+to store was 123, and it required 7 bits (<code>01111011</code>). Then I quickly realized I
+didn't need to use ASCII. I can encode them however I want. I gave each kind of parenthesis a number:
+1 for round, 2 for braces, and 3 for square brackets</p>
+
+<p>The next task was to fit multiple parens inside an integer. I chose <code>[]uint8</code> as the stack.
+Since each paren used only 2 bits, I could fit 4 parens inside an 8 bit number. When a number
+was used up, I pushed a new number.</p>
+
+<p>In the end, I successfully wrote the program.</p>
+
+<p>Here's the Go code followed by a brief explanation.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">isValid</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="nx">paren</span><span class="w">  </span><span class="kt">uint8</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="nx">curly</span><span class="w">  </span><span class="kt">uint8</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">        </span><span class="nx">square</span><span class="w"> </span><span class="kt">uint8</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="nx">stack</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">uint8</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">shift</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">shift</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">stack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">stack</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">shift</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">kind</span><span class="w"> </span><span class="kt">uint8</span>
+
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;)&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">kind</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">paren</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;{&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;}&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">kind</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">curly</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;]&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">kind</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">square</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;{&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">stack</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="nx">kind</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="nx">shift</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">shift</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">        </span><span class="k">default</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">shift</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nx">shift</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">stack</span><span class="p">)</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nx">stack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">stack</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="nx">stack</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="nx">shift</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">6</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="nx">top</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">stack</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">top</span><span class="o">&gt;&gt;</span><span class="nx">shift</span><span class="p">)</span><span class="o">&amp;</span><span class="nx">kind</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">kind</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">stack</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">shift</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>The <code>shift</code> variable is important. It keeps track of the next bit position in the "top" number.</p>
+
+<p>When the program encounters an opening paren, it places the 2-bit representation of the paren where
+<code>shift</code> points to. It does this by combining two bit patterns using the bitwise OR operator (<code>|</code>).
+In the <code>default</code> case, <code>shift</code> is immediately reduced by 2. This is equivalent to <code>top = stack.pop ()</code>.
+Then the program checks whether the top number is still needed or can be discarded.</p>
+
+<p>The <code>shift</code> variable is set to <code>6</code> if we pop the stack. This ensures the next bit-pattern is placed
+in the most significant 2 bits of the number. To check whether the parens match, we perform a mask on
+the number. The mask is the opening paren we are looking for.</p>
+
+<p>If the loop terminates without errors, then we check if we have matched all opening parens with their lovers
+by checking that the stack contains a single number and that <code>shift</code> is 0.</p>
+
+<h3>Notes</h3>
+
+<ul>
+<li><p>I used to zero-out the opening paren's bit-pattern when it was matched using this line of code:
+<code>stack[len(stack)-1] &amp;^= kind &lt;&lt; shift</code>. It was redundant. Just overwrite the number. <code>shift</code> is guiding you anyways.</p></li>
+<li><p>The solution beats <code>98.52%</code> (using 3.95 MB) of solutions in memory consumption. Not always; sometimes it
+uses 4.14 MB, which beats <code>63.49%</code> of solutions. The difference is small, but the change in percentage
+is big.</p></li>
+</ul>
+
+<hr />
+
+<p>Experienced programmers might see a lot of other opportunities for improvement or even
+different ways of solving this problem.</p>
+
+<p>It was a fun bit-packing exercise.</p>
+
+<p>Have a nice day.</p>
+
+      </article>
+    </main>
+
+    
+<footer>
+<div id="post-footer-container">
+  <a href="#top">Top</a>
+  <a href="mailto:abidindrd@gmail.com?subject=My comment on your post 'Valid parentheses problem'">
+      Leave a comment
+  </a>
+</div>
+</footer>
+
+  </div>
+
+  <script src="/assets/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+  <script>
+    hljs.configure({ ignoreUnescapedHTML: true });
+    hljs.highlightAll()
+  </script>
+
+  
+<script>
+  const el = document.querySelector("#date-container > p");
+  
+  const raw = el.textContent.trim();
+  const [day, month, year] = raw.split('-').map(Number);
+
+  const date = new Date(year, month - 1, day);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  el.textContent = date.toLocaleDateString('en-US', options);
+</script>
+
+</body>
+</html>
